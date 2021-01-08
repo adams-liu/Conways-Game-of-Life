@@ -75,31 +75,49 @@ class GameOfLife extends React.Component {
     this.setState({
       intervalId: setInterval(() => {
         this.nextGen();
-      }, 2000)
+      }, 500)
     });
   }
 
   nextGen() {
-    let row,col,r,c,;
-    for (row = 0; row < this.state.currentBoard.length;row++){
-      for (col = 0; col < this.state.currentBoard.length; col++){
+    let row, col, r, c, neighbor_counter;
+    let rows = this.state.currentBoard.length;
+    let cols = this.state.currentBoard[0].length;
+    let newBoard = this.state.currentBoard;
+    for (row = 0; row < rows; row++) {
+      for (col = 0; col < cols; col++) {
+        neighbor_counter = 0;
         neighbors.forEach((neighbor) => {
-         
+          r = row + neighbor[0];
+          c = col + neighbor[1];
+          if (
+            r < rows &&
+            r >= 0 &&
+            c < cols &&
+            c >= 0 &&
+            this.state.currentBoard[r][c] === 1
+          )
+            neighbor_counter++;
         });
 
+        if (
+          this.state.currentBoard[row][col] === 1 &&
+          (neighbor_counter > 3 || neighbor_counter < 2)
+        )
+          newBoard[row][col] = 0;
+
+        if (this.state.currentBoard[row][col] === 0 && neighbor_counter === 3)
+          newBoard[row][col] = 1;
       }
     }
-    //this.setState({ generation: this.state.generation + 1 });
-    //console.log(this.state.generation);
-    //console.log(this.state.currentBoard);
-
-
-    // Advances Game to next state.
-    // Updates generation and currentBoard,
-    // causing re-rendering. Sets currentBoard state
-    // to the next board state, providing
-    // an updated game board to be drawn by the re-render.
+    this.setState({ currentBoard: newBoard });
   }
+
+  // Advances Game to next state.
+  // Updates generation and currentBoard,
+  // causing re-rendering. Sets currentBoard state
+  // to the next board state, providing
+  // an updated game board to be drawn by the re-render.
 
   pauseSimulation() {
     // Pause the simulation if it is running
