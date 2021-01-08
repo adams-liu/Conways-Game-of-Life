@@ -74,7 +74,7 @@ class GameOfLife extends React.Component {
     if (this.state.running) return;
     this.setState({
       intervalId: setInterval(() => {
-        this.nextGen();
+        if (this.state.running) this.nextGen();
       }, 500)
     });
   }
@@ -111,27 +111,39 @@ class GameOfLife extends React.Component {
       }
     }
     this.setState({ currentBoard: newBoard });
+    this.setState({ generation: this.state.generation + 1 });
   }
 
-  // Advances Game to next state.
-  // Updates generation and currentBoard,
-  // causing re-rendering. Sets currentBoard state
-  // to the next board state, providing
-  // an updated game board to be drawn by the re-render.
-
   pauseSimulation() {
-    // Pause the simulation if it is running
-    // If it is not running, start the simulation again
+    this.setState({ running: !this.state.running });
   }
 
   randomize() {
-    // Stop the simulation
-    // Randomize the board
+    this.setState({ running: false });
+    this.setState({ generation: 0 });
+    let row, col, randomNum;
+    let newBoard = this.state.currentBoard;
+    for (row = 0; row < this.state.currentBoard.length; row++) {
+      for (col = 0; col < this.state.currentBoard[0].length; col++) {
+        newBoard[row][col] = 0;
+        randomNum = Math.floor(Math.random() * 101);
+        if (randomNum > 80) newBoard[row][col] = 1;
+      }
+    }
+    this.setState({ currentBoard: newBoard });
   }
 
   clearBoard() {
-    // stop the simulation
-    // make the board empty again
+    this.setState({ running: false });
+    this.setState({ generation: 0 });
+    let newBoard = this.state.currentBoard;
+    let row, col;
+    for (row = 0; row < this.state.currentBoard.length; row++) {
+      for (col = 0; col < this.state.currentBoard[0].length; col++) {
+        newBoard[row][col] = 0;
+      }
+    }
+    this.setState({ currentBoard: newBoard });
   }
 
   convertToOneDimension(multiDimArray) {
