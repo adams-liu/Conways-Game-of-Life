@@ -15,7 +15,16 @@ import gliderGunAndPulsars from "./originalPattern.js";
 
 // coded by @no-stack-dub-sack
 // modified by Shums into a Challenge
-
+var neighbors = [
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1]
+];
 class GameOfLife extends React.Component {
   constructor(props) {
     super(props);
@@ -66,11 +75,25 @@ class GameOfLife extends React.Component {
     this.setState({
       intervalId: setInterval(() => {
         this.nextGen();
-      }, 100)
+      }, 2000)
     });
   }
 
   nextGen() {
+    let row,col,r,c,;
+    for (row = 0; row < this.state.currentBoard.length;row++){
+      for (col = 0; col < this.state.currentBoard.length; col++){
+        neighbors.forEach((neighbor) => {
+         
+        });
+
+      }
+    }
+    //this.setState({ generation: this.state.generation + 1 });
+    //console.log(this.state.generation);
+    //console.log(this.state.currentBoard);
+
+
     // Advances Game to next state.
     // Updates generation and currentBoard,
     // causing re-rendering. Sets currentBoard state
